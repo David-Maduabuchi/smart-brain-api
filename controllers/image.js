@@ -16,6 +16,4 @@ const handleImage = (req, res, db) => {
         res.status(400).json("errror getting entries");
       })
   }
-  module.exports = {
-    handleImage: handleImage
-  }
+export default handleImage;

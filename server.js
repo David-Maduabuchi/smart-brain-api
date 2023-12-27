@@ -1,23 +1,26 @@
-const express = require("express")
-const bodyParser = require("body-parser");
-const cors = require('cors');
-const app = express();
-const knex = require('knex');
-const bcrypt = require('bcrypt-nodejs')
+import express from 'express'
+import bodyParser from 'body-parser';
+import cors from 'cors'
 
-const register = require('./controllers/register');
-const signin = require('./controllers/signin');
-const profile = require('./controllers/profile');
-const image = require('./controllers/image')
+const app = express();
+import knex from 'knex';
+import bcrypt from 'bcrypt-nodejs'
+import fetch from 'node-fetch';
+
+
+import handleSignin from './controllers/signin.js'
+import handleProfile from './controllers/profile.js';
+import handleRegister from './controllers/register.js';
+import handleImage from './controllers/image.js';
 
 const db = knex({
   client: 'pg',
   connection: {
-    host: '127.0.0.1', //this is the same thing as home, local host 
+    host: 'dpg-cm60sbocmk4c73csnq40-a', //this is the same thing as home, local host 
     port: 5432,
-    user: 'postgres',
-    password: 'cookies',
-    database: 'smart-brain'
+    user: 'mydb_feg1_user',
+    password: 'Tg0Uc0TBtatGJ89783cowGVG6G8EGsMH',
+    database: 'mydb_feg1'
   }
 });
 
@@ -26,13 +29,13 @@ app.use(cors());
 
 app.get('/', (req, res) => { res.send("success") })
 
-app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
+app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) })
 
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
+app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) })
 
-app.get('/profile/:id', (req, res) => { profile.handleProfile(req, res, db) })
+app.get('/profile/:id', (req, res) => { handleProfile(req, res, db) })
 
-app.put('/image', (req, res) => { image.handleImage(req, res, db) })
+app.put('/image', (req, res) => { handleImage(req, res, db) })
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
